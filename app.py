@@ -1011,16 +1011,16 @@ elif st.session_state.page == "ℹ️ About":
 # ----------------------------------------------------
 # Vercel Serverless Function Compatibility
 # ----------------------------------------------------
-# Dummy variables to satisfy Vercel CLI compilation checks.
 # Note: Streamlit runs on a persistent WebSocket connection, not serverless.
-app = None
-application = None
+# We define a custom HTTP handler class to satisfy Vercel checks and return a custom message.
+from http.server import BaseHTTPRequestHandler
 
-def handler(request, context):
-    return {
-        "statusCode": 200,
-        "headers": {"Content-Type": "text/html"},
-        "body": """
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        html = """
         <html>
             <head><title>Streamlit on Vercel</title></head>
             <body style="font-family: sans-serif; padding: 40px; text-align: center; background: #f3f4f6; color: #1f2937;">
@@ -1031,5 +1031,7 @@ def handler(request, context):
             </body>
         </html>
         """
-    }
+        self.wfile.write(html.encode('utf-8'))
+        return
+
 
