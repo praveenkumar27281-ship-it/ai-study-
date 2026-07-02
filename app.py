@@ -1007,3 +1007,29 @@ elif st.session_state.page == "ℹ️ About":
         </p>
     </div>
     """, unsafe_allow_html=True)
+
+# ----------------------------------------------------
+# Vercel Serverless Function Compatibility
+# ----------------------------------------------------
+# Dummy variables to satisfy Vercel CLI compilation checks.
+# Note: Streamlit runs on a persistent WebSocket connection, not serverless.
+app = None
+application = None
+
+def handler(request, context):
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "text/html"},
+        "body": """
+        <html>
+            <head><title>Streamlit on Vercel</title></head>
+            <body style="font-family: sans-serif; padding: 40px; text-align: center; background: #f3f4f6; color: #1f2937;">
+                <h2>⚠️ Vercel Deployment Notice</h2>
+                <p>Streamlit requires a persistent, long-running WebSocket connection and is not supported natively by stateless Vercel Serverless Functions.</p>
+                <p>To run the fully interactive <strong>AI Study Buddy</strong> web app, please deploy it for free on 
+                   <a href="https://share.streamlit.io" style="color: #4f46e5; font-weight: bold; text-decoration: none;">Streamlit Community Cloud</a>.</p>
+            </body>
+        </html>
+        """
+    }
+
